@@ -1,4 +1,6 @@
-
+// Concordia Comp 5421 Summer 2016
+// Assignment 5 for Federico O'Reilly 40012304
+// Unfortunately ran out of time...
 
 // #include lines
 #include <cstdlib>
@@ -8,6 +10,19 @@
 #include <vector>
 #include <iterator>
 #include <set>
+
+using namespace std;
+
+//Container print
+template <class Container>
+void print(const Container & c, const string & message ="")
+{
+    if(!message.empty()) cout << message << " : ";
+    using valType = decltype(*c.begin());
+    ostream_iterator<valType> osItr(cout, " ");
+    copy(c.begin(), c.end(), osItr);
+    cout << endl;
+}
 
 // Answer to q1
 // use std::swap to swap min and max if max < min
@@ -34,12 +49,13 @@ class Random {
 
 // a few class definitions and functions
 
-// get some info an vector contents
-void print_vec(const std::vector<int>& vec){
-    for(auto it = vec.begin(); it != vec.end(); it++){
-        std::cout << *it << "  ";
-    }
-    std::cout << std::endl;
+// is empty, pair finish, false
+// all equal pair start, false
+// at least two distinct, pair iter, true
+template < class Iterator >
+std::pair <Iterator, bool>secondMax ( Iterator start , Iterator finish )
+{
+    // y o u r c o d e 
 }
 
 int main (){
@@ -61,60 +77,36 @@ int main (){
     // Answer to q4
     std::vector<int> va(10);
     std::generate_n (va.begin(), 10, std::bind(myRandom, 1, 5)); 
-    //print_vec(va);
 
     // Answer to q5
     std::vector<int> vb;
     std::copy(va.begin(), va.end(), std::back_inserter(vb));
-    std::cout << "contents of vb after back inserter:" << std::endl;
-    print_vec(vb);
+    print(vb);
 
     // Answer to q6
     std::copy(va.begin(), va.end(), std::inserter(vb, vb.begin()));
-    std::cout << "contents of vb after inserter:" << std::endl;
-    print_vec(vb);
+    print(vb);
 
     // Answer to q7
     std::set<int> sa(vb.begin(), vb.end());
-    std::cout << "contents of sa after range constructn:" << std::endl;
-    for(auto it = sa.begin(); it != sa.end(); it++){
-        std::cout << *it << "   ";
-    }
-    std::cout << std::endl;
+    print(sa);
 
     // Answer to q8
     std::set<int,std::greater<int>> sb(vb.begin(), vb.end());
-    std::cout << "contents of sb, descending order range construction:" << std::endl;
-    for(auto it = sb.begin(); it != sb.end(); it++){
-        std::cout << *it << "   ";
-    }
-    std::cout << std::endl;
+    print(sb);
 
     // Answer to q9
     std::multiset<int> msa(vb.begin(), vb.end());
-    std::cout << "contents of msa after range constructn:" << std::endl;
-    for(auto it = msa.begin(); it != msa.end(); it++){
-        std::cout << *it << "   ";
-    }
-    std::cout << std::endl;
+    print(msa);
 
     // Answer to q10
     std::multiset<int,std::greater<int>> msb(vb.begin(), vb.end());
-    std::cout << "contents of msb, descending order range construction:" << std::endl;
-    for(auto it = msb.begin(); it != msb.end(); it++){
-        std::cout << *it << "   ";
-    }
-    std::cout << std::endl;
+    print(msb);
 
     // Answer to q11
     std::multiset<int> msc;
     std::transform(msa.begin(), msa.end(), std::inserter(msc, msc.begin()), [](int a){return a*10;});
-    std::cout << "contents of msc, after insertion with transform:" << std::endl;
-    for(auto it = msc.begin(); it != msc.end(); it++){
-
-        std::cout << *it << "  ";
-    }
-    std::cout << std::endl;
+    print(msc);
 
     // Answer to q12
     for (int i = 1; i <= 5; ++i){
@@ -131,5 +123,13 @@ int main (){
 
 
     // Answer to q14
+    std::cout << "There are "<< std::count_if(vb.begin(), vb.end(), [](int a){return ((a % 2) == 0);})
+            << " even elements in vb." << std::endl;
 
+    // Answer t o Q15
+    vector < int > int_vec {54 , 67 , 2 , 45 , 12 , 70};
+    print ( int_vec , " int_vec " );
+    //auto max2_int_vec = secondMax ( int_vec . begin () , int_vec . end ());
+    //cout << " The second largest element in int_vec is "
+    //<< * max2_int_vec << endl ;
 }

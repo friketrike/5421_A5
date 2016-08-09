@@ -53,9 +53,9 @@ class Random {
 // all equal pair start, false
 // at least two distinct, pair iter, true
 template < class Iterator >
-std::pair <Iterator, bool>secondMax ( Iterator start , Iterator finish )
+std::pair <Iterator, bool> secondMax ( Iterator start , Iterator finish )
 {
-    // y o u r c o d e 
+     
 }
 
 int main (){

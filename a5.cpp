@@ -10,6 +10,10 @@
 #include <vector>
 #include <iterator>
 #include <set>
+#include <cctype>
+#include <map>
+#include <iomanip>
+#include <sstream>
 
 using namespace std;
 
@@ -71,6 +75,63 @@ std::pair <Iterator, bool> secondMax ( Iterator start , Iterator finish )
         second = (gv(*ref, *second) && *ref != *max) ? ref : second;
     }
     return std::pair<Iterator, bool>(second, (second != max));
+}
+
+// Answer to Q16
+bool IsPalindrome(const string & phrase) {
+    string temp;
+
+    // std::remove copy_if - copy only alphabet chars
+    //      temp is empty, need an inserter
+    std::copy_if(phrase.begin(), phrase.end(), 
+            std::inserter(temp, temp.begin()), 
+            [](char c){return std::isalpha(c);});
+    // std::transform to convert all chars to lowercase
+    std::transform(temp.begin(), temp.end(), temp.begin(), 
+            [](char c){return std::tolower(c);});
+    // std::equal to compare first half to second half
+    //         1.begin() / 2.rbegin()
+    bool isPalindrome = true;
+    // return what std::equal returns
+    return std::equal(temp.begin(), temp.end(), temp.rbegin());
+}
+
+// Assignment-supplied function:
+void wordFreq() {
+    std::map<string, int> wordFreqMap;
+    std::string word;
+    while(std::cin >> word) {
+        ++wordFreqMap[word];
+    }
+    for (auto it = wordFreqMap.begin();
+              it != wordFreqMap.end(); ++it) {
+        std::cout << std::setw(5) << it->second << ": "
+                             << it->first << std:: endl;
+    }
+}
+
+// Answer to Q17
+void wordIndex() {
+    std::map<string, vector<int>> wordLineMap;
+    std::string line;
+    int line_no = 1;
+    while(std::getline(std::cin, line)) {
+        std::stringstream ss(line);
+        std::string word;
+        while(ss >> word) {    
+            wordLineMap[word].push_back(line_no);
+        }
+        ++line_no;
+    }
+    for (auto it = wordLineMap.begin();
+              it != wordLineMap.end(); ++it) {
+        std::cout << std::setw(10) << it->first << ": ";
+        for (auto it_v = it->second.begin(); it_v != it->second.end(); ++it_v) {
+            std::cout << std::setw(4) << *it_v; 
+        }
+        std::cout << std:: endl;
+    }
+
 }
 
 int main (){
@@ -156,4 +217,17 @@ int main (){
     } else {
         cout << " The vector only contains repeated instances of the same value" << endl;
     }
+    
+    // Calling answer to Q16
+    string str_cat = string("Was it a car or a cat I saw?");
+    string str_kat = string("Was it a car or a kat I saw?");
+    bool is_str_cat = IsPalindrome( str_cat );
+    bool is_str_kat = IsPalindrome( str_kat );
+    cout << "the phrase \"" + str_cat + "\" is " +
+        (is_str_cat ? "" : "not ") + "a palindrome\n";
+    cout << "the phrase \"" + str_kat + "\" is " +
+        (is_str_kat ? "" : "not ") + "a palindrome\n";
+    
+    // Calling answer to Q17
+    wordIndex();
 }

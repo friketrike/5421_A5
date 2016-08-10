@@ -55,7 +55,22 @@ class Random {
 template < class Iterator >
 std::pair <Iterator, bool> secondMax ( Iterator start , Iterator finish )
 {
-     
+    using valType = decltype(*start);
+    //using itType = decltype(start);
+    std::greater<valType> gv;
+    std::not_equal_to<valType> nev;
+    std::less<valType> lv;
+    Iterator ref{start};
+    Iterator max{start};
+    Iterator second{start};
+    for(ref; ref!= finish; ++ref) {
+        max = (gv(*ref, *max)) ? ref : max;
+        second = (lv(*ref, *second)) ? ref : second;
+    }    
+    for(ref = start; ref != finish; ref++) {
+        second = (gv(*ref, *second) && *ref != *max) ? ref : second;
+    }
+    return std::pair<Iterator, bool>(second, (second != max));
 }
 
 int main (){
@@ -128,8 +143,17 @@ int main (){
 
     // Answer t o Q15
     vector < int > int_vec {54 , 67 , 2 , 45 , 12 , 70};
+    //vector < int > int_vec;
+    //vector <int> int_vec {2};
+    //vecotr <int< int_vec {2, 2};
     print ( int_vec , " int_vec " );
-    //auto max2_int_vec = secondMax ( int_vec . begin () , int_vec . end ());
-    //cout << " The second largest element in int_vec is "
-    //<< * max2_int_vec << endl ;
+    auto max2_int_vec = secondMax ( int_vec . begin () , int_vec . end ());
+    if (max2_int_vec.second) {
+        cout << " The second largest element in int_vec is "
+        << * max2_int_vec.first << endl ;
+    } else if (max2_int_vec.first == int_vec.end()) {
+        cout << " The vector is empty!" << endl;
+    } else {
+        cout << " The vector only contains repeated instances of the same value" << endl;
+    }
 }
